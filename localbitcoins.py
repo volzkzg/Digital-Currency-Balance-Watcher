@@ -7,11 +7,12 @@ def pretty(something):
     pp.pprint(something)
 
 class LocalBitcoins:
-    def __init__(self, hmac_key, hmac_secret, usr_name):
+    def __init__(self, hmac_key, hmac_secret, usr_name, prv_money=0):
         self.hmac_key = hmac_key
         self.hmac_secret = hmac_secret
         self.conn = api.hmac(hmac_key, hmac_secret)
         self.usr_name = usr_name
+        self.prv_money = prv_money
 
     def get_income(self, contact_list):
         res = 0.0
@@ -56,7 +57,7 @@ class LocalBitcoins:
             income += self.get_income(contact_list)
             outcome += self.get_outcome(contact_list)
 
-        market_value = self.get_balance() * self.get_current_market_price()
+        market_value = (self.get_balance() + self.prv_money) * self.get_current_market_price()
         net_income = income + market_value - outcome
         print("income: {0}".format(income))
         print("outcome: {0}".format(outcome))
